@@ -3,24 +3,20 @@
 set -e -u -x
 
 OMEROVER=${OMEROVER:-latest}
-ICEVER=${ICEVER:-ice36}
 
 source `dirname $0`/settings.env
 #start-install
 
-icevalue=3.6
-#start-install
-if [ "$ICEVER" = "ice36" ]; then
-	if [ $OMEROVER == "latest" ]; then
-		#start-release-ice36
-		cd ~omero
-		SERVER=https://downloads.openmicroscopy.org/latest/omero5.5/server-ice36.zip
-		wget -q $SERVER -O OMERO.server-ice36.zip
-		unzip -q OMERO.server*
-		#end-release-ice36
-		rm OMERO.server-ice36.zip
-	fi
+if [ $OMEROVER == "latest" ]; then
+	#start-release-ice36
+	cd ~omero
+	SERVER=https://downloads.openmicroscopy.org/latest/omero5.5/server-ice36.zip
+	wget -q $SERVER -O OMERO.server-ice36.zip
+	unzip -q OMERO.server*
+	#end-release-ice36
+	rm OMERO.server-ice36.zip
 fi
+
 # no server downloaded
 if [ ! -d OMERO.server* ]; then
 	# dev branches installed via omego
@@ -28,7 +24,7 @@ if [ ! -d OMERO.server* ]; then
 	virtualenv /home/omero/omeroenv
 	/home/omero/omeroenv/bin/pip install omego==0.6.0
 	#end-venv
-	/home/omero/omeroenv/bin/omego download -q --ice $icevalue --branch $OMEROVER server
+	/home/omero/omeroenv/bin/omego download -q --ice 3.6 --branch $OMEROVER server
 fi
 
 #start-link
